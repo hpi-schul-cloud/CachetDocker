@@ -1,3 +1,4 @@
+# todo: bump, see SVS-528
 FROM nginx:1.21-alpine
 
 EXPOSE 8000
@@ -6,10 +7,11 @@ CMD ["/sbin/entrypoint.sh"]
 ARG cachet_ver
 ARG archive_url
 
-ENV cachet_ver ${cachet_ver:-2.5}
-ENV archive_url https://github.com/dBildungsplattform/Cachet/archive/2.5.tar.gz
+# todo: bump, see SVS-528
+ENV cachet_ver=${cachet_ver:-v2.5.2}
+ENV archive_url=https://github.com/hpi-schul-cloud/Cachet/archive/refs/tags/$cachet_ver.tar.gz
 
-ENV COMPOSER_VERSION 1.9.0
+ENV COMPOSER_VERSION=1.9.0
 
 RUN apk add --no-cache --update \
     mysql-client \
@@ -91,7 +93,6 @@ RUN wget ${archive_url} && \
     tar xzf ${cachet_ver}.tar.gz --strip-components=1 && \
     chown -R www-data:root /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
-    php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
     php /bin/composer.phar install -o && \
     rm -rf bootstrap/cache/*
 
